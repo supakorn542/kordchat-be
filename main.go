@@ -9,6 +9,8 @@ import (
 	_ "kordchat-be/docs"
 
 	"github.com/gin-gonic/gin"
+
+	"github.com/joho/godotenv"
 )
 
 // @title           KordChat API
@@ -18,10 +20,14 @@ import (
 // @BasePath        /api
 func main() {
 
+	err := godotenv.Load(".env.local")
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
 	config.ConnectDB()
 
 	r := gin.Default()
-
 
 	routes.SetupRoutes(r)
 

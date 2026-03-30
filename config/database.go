@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/joho/godotenv"
 	"kordchat-be/models"
 
 	"gorm.io/driver/postgres"
@@ -16,10 +15,6 @@ var DB *gorm.DB
 
 func ConnectDB() {
 
-	err := godotenv.Load(".env.local")
-	if err != nil {
-		log.Println("Warning: Could not load .env.local file, using system environment variables instead")
-	}
 
 	host := os.Getenv("DB_HOST")
 	user := os.Getenv("DB_USER")
@@ -29,6 +24,8 @@ func ConnectDB() {
 
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Bangkok",
 		host, user, password, dbname, port)
+
+	var err error
 
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {

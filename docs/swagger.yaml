@@ -1,5 +1,22 @@
 basePath: /api
 definitions:
+  dtos.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  dtos.RefreshRequest:
+    properties:
+      refresh_token:
+        type: string
+    required:
+    - refresh_token
+    type: object
   dtos.RegisterRequest:
     properties:
       email:
@@ -21,6 +38,67 @@ info:
   title: KordChat API
   version: "1.0"
 paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: validate email and password to create JWT Token
+      parameters:
+      - description: Login data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User login successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid Data
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Invalid email or password
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Login
+      tags:
+      - Auth
+  /refresh:
+    post:
+      consumes:
+      - application/json
+      description: use refresh token to create new access token
+      parameters:
+      - description: Refresh Token
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.RefreshRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: create access token successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: invalid refresh token
+          schema:
+            additionalProperties: true
+            type: object
+      summary: create new access token
+      tags:
+      - Auth
   /register:
     post:
       consumes:
