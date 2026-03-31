@@ -10,13 +10,6 @@ definitions:
     - email
     - password
     type: object
-  dtos.RefreshRequest:
-    properties:
-      refresh_token:
-        type: string
-    required:
-    - refresh_token
-    type: object
   dtos.RegisterRequest:
     properties:
       email:
@@ -76,13 +69,6 @@ paths:
       consumes:
       - application/json
       description: use refresh token to create new access token
-      parameters:
-      - description: Refresh Token
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/dtos.RefreshRequest'
       produces:
       - application/json
       responses:

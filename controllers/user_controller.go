@@ -62,10 +62,11 @@ func Login(c *gin.Context){
 		return
 	}
 
+	c.SetCookie("access_token", accessToken, 15*60, "/", "localhost", false, true)
+	c.SetCookie("refresh_token", refreshToken, 7*24*60*60, "/", "localhost", false, true)
+
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Login successfully",
-		"access_token": accessToken,
-		"refresh_token": refreshToken,
+		"message": "login successfully",
 	})
 }
 
@@ -76,25 +77,26 @@ func Login(c *gin.Context){
 // @Tags         Auth
 // @Accept       json
 // @Produce      json
-// @Param        input body dtos.RefreshRequest true "Refresh Token"
 // @Success      200  {object}  map[string]interface{} "create access token successfully"
 // @Failure      401  {object}  map[string]interface{} "invalid refresh token"
 // @Router       /refresh [post]
 func RefreshToken(c *gin.Context){
-	var input dtos.RefreshRequest
 
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error":"please send refresh token"})
+	refreshToken, err := c.Cookie("refresh_token")
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Refresh token not found"})
 		return
 	}
 
-	newAccessToken, err := services.RefreshToken(input.RefreshToken)
+	newAccessToken, err := services.RefreshToken(refreshToken)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
+	c.SetCookie("access_token", newAccessToken, 15*60, "/", "localhost", false, true)
+
 	c.JSON(http.StatusOK, gin.H{
-		"access_token": newAccessToken,
+		"message": "refresh token successfully",
 	})
 }

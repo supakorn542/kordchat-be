@@ -1,22 +1,29 @@
 package routes
 
-import(
-	"kordchat-be/controllers"
+import (
 	"github.com/gin-gonic/gin"
+	"kordchat-be/controllers"
+	"kordchat-be/middlewares"
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func SetupRoutes(r *gin.Engine){
+func SetupRoutes(r *gin.Engine) {
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
 
 	api := r.Group("api")
 	{
 		api.POST("/register", controllers.Register)
 		api.POST("/login", controllers.Login)
 		api.POST("/refresh", controllers.RefreshToken)
+
+		protected := api.Group("/")
+		protected.Use(middlewares.RequireAuth)
+		{
+
+		}
 	}
+
 }
