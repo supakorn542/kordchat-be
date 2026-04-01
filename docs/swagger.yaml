@@ -1,5 +1,12 @@
 basePath: /api
 definitions:
+  dtos.CreateServerRequest:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
   dtos.LoginRequest:
     properties:
       email:
@@ -113,4 +120,37 @@ paths:
       summary: User register
       tags:
       - Auth
+  /servers:
+    post:
+      consumes:
+      - application/json
+      description: request server name to create new server
+      parameters:
+      - description: CreateServer
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.CreateServerRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: create server successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: invalid data
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create new server
+      tags:
+      - Server
 swagger: "2.0"

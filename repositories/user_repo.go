@@ -27,3 +27,16 @@ func GetUserByEmail(email string) (*models.User, error) {
 	return &user, nil
 
 }
+
+
+func GetUserByID(id string) (*models.User, error){
+	var user models.User
+	result := config.DB.First(&user, "id = ?", id)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return  &user, nil
+
+
+}

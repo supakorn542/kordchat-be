@@ -22,7 +22,7 @@ func SetupRoutes(r *gin.Engine) {
 		protected := api.Group("/")
 		protected.Use(middlewares.RequireAuth)
 		{
-
+			protected.POST("/servers", controllers.CreateServer)
 		}
 	}
 
