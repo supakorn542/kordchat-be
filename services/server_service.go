@@ -32,3 +32,19 @@ func CreateServer(name string, ownerIDStr string) (*models.Server, error) {
 	return  &newServer, nil
 
 }
+
+
+func GetServersByUserID(userIDStr string) ([]models.Server, error){
+	userID, err := uuid.Parse(userIDStr)
+	if err != nil {
+		return  nil, err
+	}
+
+	result, err := repositories.GetServersByUserID(userID)
+	if err != nil {
+		return  nil, err
+	}
+
+	return  result, nil
+
+}

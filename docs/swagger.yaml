@@ -31,6 +31,19 @@ definitions:
     - password
     - username
     type: object
+  dtos.ServerResponse:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      ownerId:
+        type: string
+      updatedAt:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -121,6 +134,32 @@ paths:
       tags:
       - Auth
   /servers:
+    get:
+      consumes:
+      - application/json
+      description: Get servers list by userID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Servers List
+          schema:
+            items:
+              $ref: '#/definitions/dtos.ServerResponse'
+            type: array
+        "400":
+          description: invalid data
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get User's Servers
+      tags:
+      - Server
     post:
       consumes:
       - application/json
