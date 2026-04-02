@@ -217,9 +217,101 @@
                     }
                 }
             }
+        },
+        "/servers/{serverId}/channels": {
+            "post": {
+                "description": "Create a new channel in a server",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Channel"
+                ],
+                "summary": "Create a new channel",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Server ID",
+                        "name": "serverId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "CreateChannel",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dtos.CreateChannelRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Channel created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/dtos.ChannelResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "dtos.ChannelResponse": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "serverId": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "dtos.CreateChannelRequest": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
         "dtos.CreateServerRequest": {
             "type": "object",
             "required": [

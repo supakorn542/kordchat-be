@@ -1,5 +1,29 @@
 basePath: /api
 definitions:
+  dtos.ChannelResponse:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      serverId:
+        type: string
+      type:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  dtos.CreateChannelRequest:
+    properties:
+      name:
+        type: string
+      type:
+        type: string
+    required:
+    - name
+    type: object
   dtos.CreateServerRequest:
     properties:
       name:
@@ -192,4 +216,41 @@ paths:
       summary: Create new server
       tags:
       - Server
+  /servers/{serverId}/channels:
+    post:
+      consumes:
+      - application/json
+      description: Create a new channel in a server
+      parameters:
+      - description: Server ID
+        in: path
+        name: serverId
+        required: true
+        type: string
+      - description: CreateChannel
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.CreateChannelRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Channel created successfully
+          schema:
+            $ref: '#/definitions/dtos.ChannelResponse'
+        "400":
+          description: Invalid data
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new channel
+      tags:
+      - Channel
 swagger: "2.0"

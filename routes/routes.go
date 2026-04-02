@@ -24,6 +24,8 @@ func SetupRoutes(r *gin.Engine) {
 		{
 			protected.POST("/servers", controllers.CreateServer)
 			protected.GET("/servers", controllers.GetServersByUserID)
+
+			protected.POST("/servers/:serverId/channels", controllers.CreateChannel)
 		}
 	}
 
