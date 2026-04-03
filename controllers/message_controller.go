@@ -5,6 +5,7 @@ import (
 
 	"kordchat-be/dtos"
 	"kordchat-be/services"
+	"kordchat-be/websockets"
 
 	"github.com/gin-gonic/gin"
 )
@@ -44,6 +45,8 @@ func CreateMessage(c *gin.Context) {
 	}
 
 	response := dtos.ToMessageResponse(*message)
+
+	websockets.ChatHub.Broadcast <- response
 
 	c.JSON(http.StatusCreated, response)
 }

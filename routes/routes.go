@@ -30,6 +30,7 @@ func SetupRoutes(r *gin.Engine) {
 
 			protected.POST("/channels/:channelId/messages", controllers.CreateMessage)
 			protected.GET("/channels/:channelId/messages", controllers.GetMessagesByChannelID)
+			protected.GET("/channels/:channelId/ws", controllers.ServeWs)
 		}
 	}
 

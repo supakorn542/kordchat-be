@@ -25,6 +25,10 @@ func CreateMessage(content string, channelIDStr string, userIDStr string) (*mode
 		return nil, err
 	}
 
+	if channel.Type != "text" {
+		return nil, errors.New("cannot send messages to a non-text channel")
+	}
+
 	userServers, err := repositories.GetServersByUserID(userID)
 	if err != nil {
 		return nil, err
@@ -43,9 +47,9 @@ func CreateMessage(content string, channelIDStr string, userIDStr string) (*mode
 	}
 
 	newMessage := models.Message{
-		Content: content,
+		Content:   content,
 		ChannelID: channelID,
-		UserID: userID,
+		UserID:    userID,
 	}
 
 	err = repositories.CreateMessage(&newMessage)
@@ -61,7 +65,6 @@ func CreateMessage(content string, channelIDStr string, userIDStr string) (*mode
 	return &newMessage, nil
 
 }
-
 
 func GetMessagesByChannelID(channelIDStr string, userIDStr string) ([]models.Message, error) {
 	channelID, err := uuid.Parse(channelIDStr)
@@ -98,8 +101,8 @@ func GetMessagesByChannelID(channelIDStr string, userIDStr string) ([]models.Mes
 
 	messages, err := repositories.GetMessagesByChannelID(channelID)
 	if err != nil {
-		return  nil, err
+		return nil, err
 	}
 
-	return  messages, nil
+	return messages, nil
 }
