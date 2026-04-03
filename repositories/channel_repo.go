@@ -13,3 +13,15 @@ func CreateChannel(channel *models.Channel) error {
 
 	return nil
 }
+
+
+func GetChannelsByServerID(serverID string) ([]models.Channel, error) {
+	var channels []models.Channel
+	result := config.DB.Where("server_id = ?",serverID).Find(&channels)
+	if result.Error != nil {
+		return  nil, result.Error
+	}
+
+	return  channels, nil
+}
+

@@ -217,6 +217,38 @@ paths:
       tags:
       - Server
   /servers/{serverId}/channels:
+    get:
+      consumes:
+      - application/json
+      description: Get all channels in a server
+      parameters:
+      - description: Server ID
+        in: path
+        name: serverId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Channels retrieved successfully
+          schema:
+            items:
+              $ref: '#/definitions/dtos.ChannelResponse'
+            type: array
+        "400":
+          description: Invalid data
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get channels by server ID
+      tags:
+      - Channel
     post:
       consumes:
       - application/json

@@ -1,13 +1,12 @@
 package controllers
 
 import (
-	"net/http"
 	"kordchat-be/dtos"
 	"kordchat-be/services"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
-
 
 // CreateChannel godoc
 // @Summary 		Create a new channel
@@ -39,22 +38,48 @@ func CreateChannel(c *gin.Context) {
 
 	userIDStr := userID.(string)
 
-
 	channel, err := services.CreateChannel(input.Name, input.Type, serverIDStr, userIDStr)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-
-
 	response := dtos.ToChannelResponse(*channel)
 
-	c.JSON(http.StatusCreated, gin.H{
-		"message": "create channel successfully",
-		"channel": response,
-	})
+	c.JSON(http.StatusCreated, response)
 
+}
 
+// GetChannelsByServerID godoc
+// @Summary 		Get channels by server ID
+// @Description 	Get all channels in a server
+// @Tags 			Channel
+// @Accept 			json
+// @Produce 		json
+// @Param        	serverId path string true "Server ID"
+// @Success 		200 {array} dtos.ChannelResponse "Channels retrieved successfully"
+// @Failure			400 {object} map[string]interface{} "Invalid data"
+// @Failure 		401 {object} map[string]interface{} "Unauthorized"
+// @Router /servers/{serverId}/channels [get]
+func GetChannelsByServerID(c *gin.Context) {
+	serverIDStr := c.Param("serverId")
+
+	userID, exists := c.Get("userId")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	userIDStr := userID.(string)
+
+	channels, err := services.GetChannelsByServerID(serverIDStr, userIDStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	response := dtos.ToChannelResponses(channels)
+
+	c.JSON(http.StatusOK, response)
 
 }
