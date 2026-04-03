@@ -24,6 +24,13 @@ definitions:
     required:
     - name
     type: object
+  dtos.CreateMessageRequest:
+    properties:
+      content:
+        type: string
+    required:
+    - content
+    type: object
   dtos.CreateServerRequest:
     properties:
       name:
@@ -40,6 +47,21 @@ definitions:
     required:
     - email
     - password
+    type: object
+  dtos.MessageResponse:
+    properties:
+      channelId:
+        type: string
+      content:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      updatedAt:
+        type: string
+      user:
+        $ref: '#/definitions/dtos.UserResponse'
     type: object
   dtos.RegisterRequest:
     properties:
@@ -68,6 +90,15 @@ definitions:
       updatedAt:
         type: string
     type: object
+  dtos.UserResponse:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      username:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -75,6 +106,43 @@ info:
   title: KordChat API
   version: "1.0"
 paths:
+  /channels/{channelId}/messages:
+    post:
+      consumes:
+      - application/json
+      description: Create a new message in a channel
+      parameters:
+      - description: Channel ID
+        in: path
+        name: channelId
+        required: true
+        type: string
+      - description: CreateMessage
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.CreateMessageRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Message created successfully
+          schema:
+            $ref: '#/definitions/dtos.MessageResponse'
+        "400":
+          description: Invalid data
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new message
+      tags:
+      - Message
   /login:
     post:
       consumes:

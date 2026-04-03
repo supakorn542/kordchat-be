@@ -80,7 +80,7 @@ func GetChannelsByServerID(serverIDStr string, userIDStr string) ([]models.Chann
 		return nil, errors.New("user is not a member of the server")
 	}
 
-	channels, err := repositories.GetChannelsByServerID(serverIDStr)
+	channels, err := repositories.GetChannelsByServerID(serverID)
 	if err != nil {
 		return nil, err
 	}

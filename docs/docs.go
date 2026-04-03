@@ -15,6 +15,61 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/channels/{channelId}/messages": {
+            "post": {
+                "description": "Create a new message in a channel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Message"
+                ],
+                "summary": "Create a new message",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Channel ID",
+                        "name": "channelId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "CreateMessage",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dtos.CreateMessageRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Message created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/dtos.MessageResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/login": {
             "post": {
                 "description": "validate email and password to create JWT Token",
@@ -365,6 +420,17 @@ const docTemplate = `{
                 }
             }
         },
+        "dtos.CreateMessageRequest": {
+            "type": "object",
+            "required": [
+                "content"
+            ],
+            "properties": {
+                "content": {
+                    "type": "string"
+                }
+            }
+        },
         "dtos.CreateServerRequest": {
             "type": "object",
             "required": [
@@ -388,6 +454,29 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string"
+                }
+            }
+        },
+        "dtos.MessageResponse": {
+            "type": "object",
+            "properties": {
+                "channelId": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/dtos.UserResponse"
                 }
             }
         },
@@ -427,6 +516,20 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "dtos.UserResponse": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }
