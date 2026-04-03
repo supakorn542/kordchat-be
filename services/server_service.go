@@ -26,25 +26,48 @@ func CreateServer(name string, ownerIDStr string) (*models.Server, error) {
 
 	err = repositories.CreateServer(&newServer)
 	if err != nil {
-		return  nil, err
+		return nil, err
 	}
 
-	return  &newServer, nil
+	return &newServer, nil
 
 }
 
-
-func GetServersByUserID(userIDStr string) ([]models.Server, error){
+func GetServersByUserID(userIDStr string) ([]models.Server, error) {
 	userID, err := uuid.Parse(userIDStr)
 	if err != nil {
-		return  nil, err
+		return nil, err
 	}
 
 	result, err := repositories.GetServersByUserID(userID)
 	if err != nil {
-		return  nil, err
+		return nil, err
 	}
 
-	return  result, nil
+	return result, nil
+
+}
+
+func AddUserToServer(serverIDStr string, userIDStr string) (*models.Server, error) {
+	serverID, err := uuid.Parse(serverIDStr)
+	if err != nil {
+		return nil, err
+	}
+	userID, err := uuid.Parse(userIDStr)
+	if err != nil {
+		return nil, err
+	}
+
+	server, err := repositories.GetServerByID(serverID)
+	if err != nil {
+		return nil, err
+	}
+
+	err = repositories.AddUserToServer(serverID, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return server, nil
 
 }

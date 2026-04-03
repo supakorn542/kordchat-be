@@ -385,4 +385,36 @@ paths:
       summary: Create a new channel
       tags:
       - Channel
+  /servers/{serverId}/join:
+    post:
+      consumes:
+      - application/json
+      description: Add current user to a server
+      parameters:
+      - description: Server ID
+        in: path
+        name: serverId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully joined the server
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid data
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Join a server
+      tags:
+      - Server
 swagger: "2.0"

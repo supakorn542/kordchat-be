@@ -78,3 +78,40 @@ func GetServersByUserID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response)
 }
+
+
+// JoinServer godoc
+// @Summary        Join a server
+// @Description    Add current user to a server
+// @Tags           Server
+// @Accept         json
+// @Produce        json
+// @Param          serverId path string true "Server ID"
+// @Success        200 {object} map[string]interface{} "Successfully joined the server"
+// @Failure        400 {object} map[string]interface{} "Invalid data"
+// @Failure        401 {object} map[string]interface{} "Unauthorized"
+// @Router /servers/{serverId}/join [post]
+func AddUserToServer(c *gin.Context) {
+	serverIDStr := c.Param("serverId")
+
+	userID, exists := c.Get("userId")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		return
+	}
+
+	userIDStr := userID.(string)
+
+	server, err := services.AddUserToServer(serverIDStr, userIDStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	response := dtos.ToServerResponse(*server)
+
+    c.JSON(http.StatusOK, gin.H{
+        "message": "successfully joined the server",
+        "server":  response,
+    })
+}
