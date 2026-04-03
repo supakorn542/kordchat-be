@@ -107,6 +107,38 @@ info:
   version: "1.0"
 paths:
   /channels/{channelId}/messages:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all messages for a specific channel
+      parameters:
+      - description: Channel ID
+        in: path
+        name: channelId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Messages retrieved successfully
+          schema:
+            items:
+              $ref: '#/definitions/dtos.MessageResponse'
+            type: array
+        "400":
+          description: Invalid data
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all messages in a channel
+      tags:
+      - Message
     post:
       consumes:
       - application/json
